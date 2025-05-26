@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title> Rooms Star Bot – District (Demo)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+.sidebar {
+      width: 250px;
+      overflow-y: auto;
+      text-align: center;
+padding: 20px 0;
+    }
+    .sidebar h2 {
+      margin-top: 0;
+    }
+.container{
+    display:  flex;
+}
+
+  </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+
+  <!-- Chatbot access button -->
+  <div id="entry-button" class="mb-8">
+    <button id="show-chatbot" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-3 rounded-full fixed bottom-4 right-4">
+      Access the chatbot
+    </button>
+  </div>
+
+  <div class="container">
+
+
+
+   <div class="sidebar hidden" id="history">
+    <h2>History</h2>
+    <div class="conversation-title">Big Ben Homes</div>
+    <div class="conversation-title">Search in Camden</div>
+    <div class="conversation-title">Best neighbourhoods for families</div>
+    <!-- Add more titles here as needed -->
+  </div>  
+   <div id="chatbot" class="hidden w-full max-w-md bg-white shadow-xl rounded-2xl overflow-hidden bg-indigo-600">
+
+
+    <!-- Header -->
+    <header class="bg-indigo-600 text-white text-center py-3">
+      <h1 class="text-lg font-semibold"> Rooms star chatbot</h1>
+      <p class="text-sm">Click on a district or type your question!</p>
+    </header>
+
+    <!-- Chat window -->
+    <div id="chat-window" class="p-4 h-80 overflow-y-auto space-y-3 text-sm">
+      <div class="text-yellow-500">Suggestion: In the Camden district, how many 30m² apartments are available?</div>
+      <div class="text-yellow-500">Suggestion: Is there a school near the Clapham district?</div>
+      <div class="text-yellow-500">Suggestion: Is the Brixton district quiet?</div>
+      <div class="text-gray-500">Bot: Hello! Which district of London would you like to explore?</div>
+    </div>
+
+    <!-- Quick suggestions -->
+    <div id="suggestions" class="px-4 pb-2 flex flex-wrap gap-2">
+      <button data-area="Clapham" class="suggestion-btn bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs hover:bg-gray-300">Clapham</button>
+      <button data-area="Camden" class="suggestion-btn bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs hover:bg-gray-300">Camden</button>
+      <button data-area="Brixton" class="suggestion-btn bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs hover:bg-gray-300">Brixton</button>
+    </div>
+
+    <!-- Input field -->
+    <form id="chat-form" class="flex border-t">
+      <input id="user-input" type="text" placeholder="E.g. Tell me about Clapham…" class="flex-grow p-3 outline-none" />
+      <button type="submit" class="p-3 bg-indigo-600 text-white">Send</button>
+    </form>
+  </div>
+
+    </div>
+  <script>
+    const chatWindow = document.getElementById('chat-window');
+    const chatForm = document.getElementById('chat-form');
+    const userInput = document.getElementById('user-input');
+    const chatbot = document.getElementById('chatbot');
+    const history = document.getElementById('history');
+
+    const entryBtn = document.getElementById('entry-button');
+    const showChatbotBtn = document.getElementById('show-chatbot');
+let nIndex = 0;
+    // Fake answers (POC)
+    const data = {
+      clapham: "Clapham is a lively district in southwest London, known for its green Common, independent cafés, and quick access to the Northern Line. Rent for a two-bedroom apartment is around £2,200/month.",
+      camden: "Camden blends an alternative vibe with picturesque markets along Regent's Canal. Well connected (Northern Line and Overground), studio rents are around £1,800/month.",
+      brixton: "Brixton has a vibrant cultural scene, the Victoria Line, and Afro-Caribbean restaurants. Expect to pay around £1,950/month for a two-bedroom apartment."
+    };
+
+    // Show chatbot and hide button
+    showChatbotBtn.addEventListener('click', () => {
+      entryBtn.style.display = 'none';
+      chatbot.classList.remove('hidden');
+      history.classList.remove('hidden');
+
+    });
+
+    // Send message
+    chatForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
+      addMessage('You', text);
+      respond(text.toLowerCase());
+      userInput.value = '';
+    });
+
+    // Handle suggestion buttons
+    document.querySelectorAll('.suggestion-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const area = btn.dataset.area;
+        const text = `Tell me about ${area}`;
+        addMessage('You', text);
+        respond(area.toLowerCase());
+      });
+    });
+
+    function addMessage(sender, text) {
+      const bubble = document.createElement('div');
+      bubble.innerHTML = `<strong>${sender}:</strong> ${text}`;
+      chatWindow.appendChild(bubble);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+
+    function respond(question) {
+      const match = Object.keys(data).find(q => question.includes(q));
+      nIndex ++;
+      console.log(nIndex);
+
+      if(nIndex >=  3 ){
+        addMessage('Bot', '<p> Agence de brixton</p> <p> number phone : +336-33-01-01-01</p> <p> Open from 8 AM to 7 PM </p> <div class="map-container"> <iframe  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1981.318529392155!2d-0.12572928400041864!3d51.50072997963427!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604c118f1c6f1%3A0xb0f9b11e8e06b67a!2sBig%20Ben!5e0!3m2!1sen!2suk!4v1623851892572!5m2!1sen!2suk" allowfullscreen=""  loading="lazy" ></iframe></div>');
+    return;  
+    }
+      if (match) {
+        addMessage('Bot', data[match]);
+      } else {
+        addMessage('Bot', "Sorry, I don't know that district yet. Try Camden, Brixton, or Clapham!");
+      }
+    }
+  </script>
+</body>
+</html>
